@@ -17,8 +17,8 @@ class Main
         $audi = new Audi("A4");
         $audi->increaseSpeedBy(10);
         $audi->turnLeft();
-        printf($audi->getCurrentSpeed());
-        printf($audi->getWheelPosition());
+        $audi->printCurrentSpeed();
+        $audi->printWheelPosition();
     }
 }
 

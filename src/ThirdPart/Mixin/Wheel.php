@@ -31,4 +31,9 @@ trait Wheel
     {
         return $this->wheelPosition;
     }
+
+    public function printWheelPosition()
+    {
+        printf("Wheel position: ".$this->wheelPosition."\n");
+    }
 }

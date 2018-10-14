@@ -33,4 +33,9 @@ trait Speed
         return $this->speed;
     }
 
+
+    public function printCurrentSpeed()
+    {
+        printf("Current speed: ".$this->speed."\n");
+    }
 }

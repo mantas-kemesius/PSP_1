@@ -18,6 +18,11 @@ trait Engine
         return $this->engineStatus;
     }
 
+    public function printEngineStatus()
+    {
+        printf("Engine status: ".$this->engineStatus."\n");
+    }
+
     public function turnOnEngine()
     {
         $this->engineStatus = true;
