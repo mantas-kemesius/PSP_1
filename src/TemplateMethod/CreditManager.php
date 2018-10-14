@@ -9,7 +9,25 @@
 namespace PSP\TemplateMethod;
 
 
-class CreditManager
-{
+use PSP\Users\Employee;
 
+abstract class CreditManager
+{
+    protected $permissionToGetCredit;
+
+    public function getCredit(float $amount, Employee $e)
+    {
+        $this->askForCredit($amount, $e);
+        if($this->permissionToGetCredit){
+            $this->payCredit($amount, $e);
+        }
+    }
+
+    protected abstract function askForCredit(float $amount, Employee $e);
+
+    protected function payCredit($amount, Employee $e)
+    {
+        $e->setBalance($e->getBalance()+$amount);
+        printf("Credit: ".$amount." was transfer for Employee: ".$e->getName().".\n");
+    }
 }
