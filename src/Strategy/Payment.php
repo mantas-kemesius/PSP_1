@@ -8,11 +8,12 @@
 
 namespace PSP\Strategy;
 
+use PSP\Users\Employee;
 use PSP\Users\PersonWithBankAccount;
 
 interface Payment
 {
     public function checkIfSufficient(float $amount);
-    public function calculateAmountWithTaxes(float $amount, PersonWithBankAccount $p);
-    public function pay(float $amount, PersonWithBankAccount $p);
+    public function calculateAmountAfterTaxes(float $amount);
+    public function pay(float $amount);
 }

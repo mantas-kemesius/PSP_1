@@ -11,16 +11,22 @@ namespace PSP\Strategy;
 
 use PSP\Users\Employee;
 
-class SalaryCalculationHourly implements SalaryCalculation
+class SalaryCalculationHourly implements IncomeCalculation
 {
-    public function calculateBase(Employee $e)
+    private $e;
+
+    public function __construct(Employee $e)
     {
-        $hourlyPay = 0;
-        if ($e->getPosition() == Employee::POSITIONS[2])
+        $this->e = $e;
+    }
+
+    private function calculateFullSalary()
+    {
+        if ($this->e->getPosition() == Employee::POSITIONS[2])
         {
             $hourlyPay = 20;
         }
-        else if ($e->getPosition() == Employee::POSITIONS[1])
+        else if ($this->e->getPosition() == Employee::POSITIONS[1])
         {
             $hourlyPay = 15;
         }
@@ -28,24 +34,29 @@ class SalaryCalculationHourly implements SalaryCalculation
         {
             $hourlyPay = 10;
         }
-        return $hourlyPay * $e->getWorkingHours();
+
+        return ($this->e->getWorkingHours() * $hourlyPay) + $this->calculateBonus();
     }
 
-    public function calculateBonus(float $basePayment, Employee $e)
+    private function calculateBonus()
     {
-        $hourlyPay = $basePayment / $e->getWorkingHours();
-        if ($e->getPosition() == Employee::POSITIONS[2])
+        if ($this->e->getPosition() == Employee::POSITIONS[2])
         {
-            $hourlyPay += 5;
+            $hourlyPay = 25;
         }
-        else if ($e->getPosition() == Employee::POSITIONS[1])
+        else if ($this->e->getPosition() == Employee::POSITIONS[1])
         {
-            $hourlyPay += 3;
+            $hourlyPay = 18;
         }
         else
         {
-            $hourlyPay += 2;
+            $hourlyPay = 12;
         }
-        return $hourlyPay * $e->getBonusHours();
+        return $hourlyPay * $this->e->getBonusHours();
+    }
+
+    public function calculateIncome(): float
+    {
+        return $this->calculateFullSalary();
     }
 }

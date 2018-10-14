@@ -8,45 +8,51 @@
 
 namespace PSP\Strategy;
 
-
-use PSP\Users\PersonWithBankAccount;
+use PSP\Users\Employee;
 
 class PaymentByPaypal implements Payment
 {
 
-    private $paypalBalance;
+    private $e;
 
-    public function __construct(float $paypalBalance)
+    public function __construct(Employee $e)
     {
-        $this->paypalBalance = $paypalBalance;
+        $this->e = $e;
     }
 
-    public function checkIfSufficient(float $amount)
+    public function checkIfSufficient(float $incomes)
     {
         printf("Connecting to Paypal..\n");
-        sleep(1);
-        printf("Checking if there is enough money in Paypal account..\n");
-        if ($this->paypalBalance > $amount) return true;
-        else return false;
+        sleep(0.5);
+        printf("Checking if incomes is bigger then 0..\n");
+        if ($incomes > 0) {
+            printf("Amount is sufficient..\n");
+            return true;
+        }
+        else {
+            printf("Is not possible to transfer this amount of money..\n");
+            return false;
+        }
     }
 
-    public function calculateAmountWithTaxes(float $amount, PersonWithBankAccount $p)
+    public function calculateAmountAfterTaxes(float $incomes)
     {
         printf("Calculating taxes..\n");
         $taxesPercent = 2.9;
-        if ($p->getPaypalEmail() == "" || $p->getPaypalCountry() == "")
+        if ($this->e->getPaypalEmail() == "" || $this->e->getPaypalCountry() == "")
         {
             return 0;
         }
-        else if ($p->getPaypalCountry() != "Lithuania")
+        else if ($this->e->getPaypalCountry() != "Lithuania")
         {
             $taxesPercent += 2;
         }
-        return $amount * 100 / (100 - $taxesPercent);
+        return $incomes * 100 / (100 - $taxesPercent);
     }
 
-    public function pay(float $amount, PersonWithBankAccount $p)
+    public function pay(float $incomes)
     {
-        printf($amount." transfered to ".$p->getPaypalEmail()."\n");
+        printf($incomes." transfered to ".$this->e->getPaypalEmail()." account!\n");
+        $this->e->setBalance($this->e->getBalance()+$incomes);
     }
 }

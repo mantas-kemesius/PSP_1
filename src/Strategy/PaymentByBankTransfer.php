@@ -8,57 +8,68 @@
 
 namespace PSP\Strategy;
 
-
-use PSP\Users\PersonWithBankAccount;
+use PSP\Users\Employee;
 
 class PaymentByBankTransfer implements Payment
 {
-    private $bankBalance;
+    private $e;
 
     /**
      * PaymentByBankTransfer constructor.
-     * @param float $bankBalance
+     * @param Employee $e
      */
-    public function __construct(float $bankBalance)
+    public function __construct(Employee $e)
     {
-        $this->bankBalance = $bankBalance;
+        $this->e = $e;
     }
 
     /**
-     * @param float $amount
+     * @param float $incomes
      * @return bool
      */
-    public function checkIfSufficient(float $amount) : bool
+    public function checkIfSufficient(float $incomes) : bool
     {
         printf("Connecting to bank..\n");
         sleep(0.5);
-        printf("Checking if there is enough money in bank account..\n");
-        if ($this->bankBalance > $amount) return true;
-        else return false;
+        printf("Checking if incomes is bigger then 0..\n");
+        if ($incomes > 0) {
+            printf("Amount is sufficient..\n");
+            return true;
+        }
+        else {
+            printf("Is not possible to transfer this amount of money..\n");
+            return false;
+        }
     }
 
-    public function calculateAmountWithTaxes(float $amount, PersonWithBankAccount $p)
+    /**
+     * @param float $incomes
+     * @return float|int
+     */
+    public function calculateAmountAfterTaxes(float $incomes)
     {
         printf("Calculating taxes..\n");
-        $withTaxes = $amount;
 
-        if ($p->getIban() == "")
+        if ($this->e->getIban() == "")
         {
             return 0;
         }
-        else if (substr($p->getIban(), 0, 2) != "LT")
+        else if (substr($this->e->getIban(), 0, 2) != "LT")
         {
-            $withTaxes += 20;
+            $incomesAfterTaxes = $incomes - 20;
         }
         else
         {
-            $withTaxes += 1;
+            $incomesAfterTaxes = $incomes - 10;
         }
-        return $withTaxes;
+
+        return $incomesAfterTaxes;
     }
 
-    public function pay(float $amount, PersonWithBankAccount $p)
+    public function pay(float $incomes)
     {
-        printf($amount." transfered to ".$p->getIban()."\n");
+        printf($incomes." transfered to ".$this->e->getIban()." account!\n");
+        $this->e->setBalance($this->e->getBalance()+$incomes);
     }
+
 }

@@ -11,28 +11,40 @@ namespace PSP\Strategy;
 
 use PSP\Users\Employee;
 
-class SalaryCalculationMonthly implements SalaryCalculation
+class SalaryCalculationMonthly implements IncomeCalculation
 {
-    public function calculateBase(Employee $e)
+    private $e;
+
+    public function __construct(Employee $e)
     {
-        return $e->getMonthSalary();
+        $this->e = $e;
     }
 
-    public function calculateBonus(float $basePayment, Employee $e)
+    private function calculateFullSalary()
     {
-        $hourlyPay =  $basePayment / 40;
-        if ($e->getPosition() == Employee::POSITIONS[2])
+        return $this->e->getMonthSalary() + $this->calculateBonus();
+    }
+
+    private function calculateBonus(): float
+    {
+        $hourlyPay =  $this->e->getMonthSalary() / $this->e->getWorkingHours();
+        if ($this->e->getPosition() == Employee::POSITIONS[2])
         {
-            $hourlyPay += 5;
+            $hourlyPay *= 5;
         }
-        else if ($e->getPosition() == Employee::POSITIONS[1])
+        else if ($this->e->getPosition() == Employee::POSITIONS[1])
         {
-            $hourlyPay += 3;
+            $hourlyPay *= 3;
         }
         else
         {
-            $hourlyPay += 2;
+            $hourlyPay *= 2;
         }
-        return $hourlyPay * $e->getBonusHours();
+        return $hourlyPay * $this->e->getBonusHours();
+    }
+
+    public function calculateIncome(): float
+    {
+        return $this->calculateFullSalary();
     }
 }
