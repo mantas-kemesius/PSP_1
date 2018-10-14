@@ -1,9 +1,4 @@
 {
-  "config": {
-    "platform": {
-      "php": "7.2"
-    }
-  },
   "autoload": {
     "psr-4": {
       "PSP\\": "src/"

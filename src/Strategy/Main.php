@@ -21,16 +21,13 @@ class Main
         $ibanUser->setBalance(1000);
         $ibanUser->setCreditAmount(400);
 
-        $incomes = new SalaryCalculationMonthly($ibanUser);
-        $bank = new PaymentByBankTransfer($ibanUser);
+        $incomesFrom = new SalaryCalculationMonthly($ibanUser);
+        $incomesTransferThrough = new PaymentByBankTransfer($ibanUser);
 
         printf("Balance before: ".$ibanUser->getBalance()."\n\n");
-        $incomesManager = new IncomesManager($bank, $incomes);
+        $incomesManager = new IncomesManager($incomesTransferThrough, $incomesFrom);
         $incomesManager->getIncomes();
         printf("Balance after: ".$ibanUser->getBalance()."\n\n");
-
-
-
 
 //        $paypalUser = new Employee("Mantas", "", "mantas@gmail.com", "Lithuania");
 //        $paypalUser->setWorkingHours(160);

@@ -8,9 +8,6 @@
 
 namespace PSP\Strategy;
 
-use PSP\Users\Employee;
-use PSP\Users\PersonWithBankAccount;
-
 interface Payment
 {
     public function checkIfSufficient(float $amount);
